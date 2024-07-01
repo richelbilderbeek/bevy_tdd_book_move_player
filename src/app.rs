@@ -14,34 +14,43 @@ pub fn create_app(game_parameters: GameParameters) -> App {
         );
     };
     app.add_systems(Startup, add_player_fn);
+    app.add_systems(Update, move_player);
 
     // Do not do update, as this will disallow to do more steps
     // app.update(); //Don't!
     return app;
 }
 
+/*
+// From https://github.com/bevyengine/bevy/blob/main/examples/app/custom_loop.rs
+fn my_runner(mut app: App) -> AppExit {
+    // Finalize plugin building, including running any necessary clean-up.
+    // This is normally completed by the default runner.
+    app.finish();
+    app.cleanup();
+
+    app.update();
+    app.update();
+    app.update();
+    app.update();
+    app.update();
+    AppExit::Success
+}
+*/
+
 #[cfg(test)]
 fn add_player(mut commands: Commands) {
     commands.spawn(Player);
 }
 
+fn move_player(mut query: Query<&mut Transform, With<Player>>) {
+    let mut player_sprite = query.single_mut();
+    player_sprite.translation.x += 1.0;
+}
+
 #[cfg(test)]
 fn add_player_with_sprite(mut commands: Commands) {
     commands.spawn((SpriteBundle { ..default() }, Player));
-}
-
-#[allow(dead_code)]
-fn add_player_with_sprite_at_pos(mut commands: Commands, initial_player_position: Vec3) {
-    commands.spawn((
-        SpriteBundle {
-            transform: Transform {
-                translation: initial_player_position,
-                ..default()
-            },
-            ..default()
-        },
-        Player,
-    ));
 }
 
 fn add_player_with_sprite_at_pos_with_scale(
@@ -158,7 +167,6 @@ mod tests {
         app.update();
         assert_eq!(get_player_coordinat(&mut app), initial_coordinat);
     }
-
 
     #[test]
     fn test_player_has_a_custom_scale() {
