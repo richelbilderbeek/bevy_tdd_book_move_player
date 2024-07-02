@@ -26,26 +26,6 @@ fn move_player(mut query: Query<(&mut Transform, &Player)>) {
     player_sprite.translation.y += player.velocity.y;
 }
 
-/*
-fn add_player_with_sprite_at_pos_with_scale(
-    mut commands: Commands,
-    initial_player_position: Vec3,
-    initial_player_scale: Vec3,
-) {
-    commands.spawn((
-        SpriteBundle {
-            transform: Transform {
-                translation: initial_player_position,
-                scale: initial_player_scale,
-                ..default()
-            },
-            ..default()
-        },
-        create_default_player(),
-    ));
-}
-*/
-
 fn add_player_from_parameters(mut commands: Commands, parameters: &GameParameters) {
     commands.spawn((
         SpriteBundle {
@@ -91,6 +71,7 @@ fn get_player_scale(app: &mut App) -> Vec3 {
     return transform.scale;
 }
 
+#[cfg(test)]
 fn print_all_components_names(app: &App) {
     for c in app.world.components().iter() {
         println!("{}", c.name())
