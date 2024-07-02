@@ -1,23 +1,14 @@
 use crate::game_parameters::*;
+use crate::player::*;
 use bevy::prelude::*;
-
-#[derive(Component)]
-pub struct Player;
 
 pub fn create_app(game_parameters: GameParameters) -> App {
     let mut app = App::new();
     let add_player_fn = move |/* no mut? */ commands: Commands| {
-        add_player_with_sprite_at_pos_with_scale(
-            commands,
-            game_parameters.initial_player_position,
-            game_parameters.initial_player_scale,
-        );
+        add_player_from_parameters(commands, &game_parameters);
     };
     app.add_systems(Startup, add_player_fn);
-    let move_player_fn = move |/* no mut? */ query: Query<&mut Transform, With<Player>>| {
-        move_player(query, game_parameters.player_velocity);
-    };
-    app.add_systems(Update, move_player_fn);
+    app.add_systems(Update, move_player);
 
     // Do not do update, as this will disallow to do more steps
     // app.update(); //Don't!
@@ -26,15 +17,16 @@ pub fn create_app(game_parameters: GameParameters) -> App {
 
 #[cfg(test)]
 fn add_player(mut commands: Commands) {
-    commands.spawn(Player);
+    commands.spawn(create_default_player());
 }
 
-fn move_player(mut query: Query<&mut Transform, With<Player>>, velocity: Vec2) {
-    let mut player_sprite = query.single_mut();
-    player_sprite.translation.x += velocity.x;
-    player_sprite.translation.y += velocity.y;
+fn move_player(mut query: Query<(&mut Transform, &Player)>) {
+    let (mut player_sprite, player) = query.single_mut();
+    player_sprite.translation.x += player.velocity.x;
+    player_sprite.translation.y += player.velocity.y;
 }
 
+/*
 fn add_player_with_sprite_at_pos_with_scale(
     mut commands: Commands,
     initial_player_position: Vec3,
@@ -49,7 +41,24 @@ fn add_player_with_sprite_at_pos_with_scale(
             },
             ..default()
         },
-        Player,
+        create_default_player(),
+    ));
+}
+*/
+
+fn add_player_from_parameters(mut commands: Commands, parameters: &GameParameters) {
+    commands.spawn((
+        SpriteBundle {
+            transform: Transform {
+                translation: parameters.initial_player_position,
+                scale: parameters.initial_player_scale,
+                ..default()
+            },
+            ..default()
+        },
+        Player {
+            velocity: parameters.initial_player_velocity,
+        },
     ));
 }
 
@@ -152,7 +161,7 @@ mod tests {
         use create_default_game_parameters as create_params;
         let mut params = create_params();
         let velocity = Vec2::new(1.1, 2.2);
-        params.player_velocity = velocity.clone();
+        params.initial_player_velocity = velocity.clone();
         let mut app = create_app(params);
         app.update(); // Already moves the player
         assert_ne!(

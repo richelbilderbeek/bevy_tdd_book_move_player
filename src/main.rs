@@ -3,6 +3,7 @@ use crate::game_parameters::*;
 use bevy::prelude::*;
 mod app;
 mod game_parameters;
+mod player;
 
 fn main() {
     let mut app = create_app(create_default_game_parameters_with_player_velocity(
