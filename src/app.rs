@@ -93,6 +93,12 @@ fn get_player_scale(app: &mut App) -> Vec3 {
     return transform.scale;
 }
 
+fn print_all_components_names(app: &App) {
+    for c in app.world.components().iter() {
+        println!("{}", c.name())
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -159,18 +165,31 @@ mod tests {
     #[test]
     fn test_player_moves() {
         use create_default_game_parameters as create_params;
-        let mut params = create_params();
-        let velocity = Vec2::new(1.1, 2.2);
-        params.initial_player_velocity = velocity.clone();
+        let params = create_default_game_parameters_with_player_velocity(Vec2::new(1.1, 2.2));
         let mut app = create_app(params);
         app.update(); // Already moves the player
         assert_ne!(
             create_params().initial_player_position,
             get_player_coordinat(&mut app)
         );
-        // This more precise test will probably be removed in the future
+    }
+
+    #[test]
+    fn test_player_moves_in_a_line() {
+        use create_default_game_parameters as create_params;
+        let velocity = Vec2::new(1.1, 2.2);
+        let params = create_default_game_parameters_with_player_velocity(velocity);
+        let mut app = create_app(params);
+        app.update(); // Already moves the player
         let expected_pos =
             create_params().initial_player_position + Vec3::new(velocity.x, velocity.y, 0.0);
         assert_eq!(expected_pos, get_player_coordinat(&mut app));
+    }
+
+    #[test]
+    fn test_print_all_components_names() {
+        let mut app = create_app(create_default_game_parameters());
+        app.update();
+        print_all_components_names(&app);
     }
 }
