@@ -1,12 +1,10 @@
 [package]
-name = "bevy_tdd_book_add_player_sprite"
+name = "bevy_tdd_book_move_player"
 version = "0.1.0"
 edition = "2021"
 
-
 [dependencies]
 bevy = { version = "0.13.2", features = ["dynamic_linking"] }
-partial_application = { version = "0.2.1" }
 
 # Enable a small amount of optimization in debug mode
 [profile.dev]
