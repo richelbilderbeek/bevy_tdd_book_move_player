@@ -76,11 +76,9 @@ fn count_n_players(app: &App) -> usize {
 
 #[cfg(test)]
 fn get_player_coordinat(app: &mut App) -> Vec3 {
-    assert_eq!(
-        count_n_players(&app),
-        1,
-        "Do 'app.update()' before calling this function"
-    );
+    // Do 'app.update()' before calling this function,
+    // else this assert goes off.
+    assert_eq!(count_n_players(&app), 1);
     let mut query = app.world.query::<(&Transform, &Player)>();
     let (transform, _) = query.single(&app.world);
     return transform.translation;
