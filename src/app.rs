@@ -59,14 +59,14 @@ fn get_player_coordinat(app: &mut App) -> Vec3 {
     // Do 'app.update()' before calling this function,
     // else this assert goes off.
     assert_eq!(count_n_players(app), 1);
-    let mut query = app.world().query::<(&Transform, &Player)>();
+    let mut query = app.world_mut().query::<(&Transform, &Player)>();
     let (transform, _) = query.single(&app.world());
     transform.translation
 }
 
 #[cfg(test)]
 fn get_player_scale(app: &mut App) -> Vec3 {
-    let mut query = app.world().query::<(&Transform, &Player)>();
+    let mut query = app.world_mut().query::<(&Transform, &Player)>();
     let (transform, _) = query.single(&app.world());
     transform.scale
 }
