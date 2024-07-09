@@ -1,4 +1,3 @@
-//use crate::player::*;
 use bevy::prelude::*;
 
 /// Player elements that cannot be put in a SpriteBundle
