@@ -1,7 +1,6 @@
 use crate::app::*;
 use bevy::prelude::*;
 mod app;
-mod player;
 
 fn main() {
     let velocity = Vec2::new(0.2, 0.1);

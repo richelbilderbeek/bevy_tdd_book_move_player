@@ -1,5 +1,11 @@
-use crate::player::*;
+//use crate::player::*;
 use bevy::prelude::*;
+
+/// Player elements that cannot be put in a SpriteBundle
+#[derive(Component)]
+pub struct Player {
+    pub velocity: Vec2,
+}
 
 pub fn create_app(velocity: Vec2) -> App {
     let mut app = App::new();
