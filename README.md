@@ -17,7 +17,6 @@ git clone https://github.com/richelbilderbeek/bevy_tdd_book_move_player
 cd bevy_tdd_book_move_player
 cargo init
 cargo add bevy
-cargo add bevy -F dynamic_linking
 ```
 
 To [Cargo.toml](Cargo.toml) add:
