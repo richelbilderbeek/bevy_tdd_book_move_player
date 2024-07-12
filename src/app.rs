@@ -34,7 +34,7 @@ fn add_player(mut commands: Commands, velocity: Vec2) {
             },
             ..default()
         },
-        Player { velocity: velocity },
+        Player { velocity },
     ));
 }
 
