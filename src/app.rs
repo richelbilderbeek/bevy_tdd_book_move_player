@@ -61,8 +61,9 @@ fn get_player_scale(app: &mut App) -> Vec2 {
 
 #[cfg(test)]
 fn get_player_velocity(app: &mut App) -> Vec2 {
-    let mut query = app.world_mut().query::<&Player>();
-    query.single(app.world()).velocity
+    let mut query = app.world_mut().query::<(&Transform, &Player)>();
+    let (_, player) = query.single(app.world());
+    player.velocity
 }
 
 #[cfg(test)]
@@ -72,6 +73,7 @@ mod tests {
     #[test]
     fn test_empty_app_has_no_players() {
         let mut app = App::new();
+        app.update();
         assert_eq!(count_n_players(&mut app), 0);
     }
 
@@ -79,6 +81,7 @@ mod tests {
     fn test_can_set_and_get_velocity() {
         let velocity = Vec2::new(1.2, 3.4);
         let mut app = create_app(velocity);
+        app.update();
         assert_eq!(get_player_velocity(&mut app), velocity);
     }
 
@@ -91,7 +94,7 @@ mod tests {
     }
 
     #[test]
-    fn test_player_is_at_origin() {
+    fn test_player_starts_at_the_origin() {
         let velocity = Vec2::new(0.0, 0.0);
         let mut app = create_app(velocity);
         app.update();
