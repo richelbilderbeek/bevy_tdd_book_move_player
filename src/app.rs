@@ -45,17 +45,24 @@ fn count_n_players(app: &mut App) -> usize {
 }
 
 #[cfg(test)]
-fn get_player_coordinat(app: &mut App) -> Vec2 {
+fn get_player_position(app: &mut App) -> Vec2 {
     let mut query = app.world_mut().query::<(&Transform, &Player)>();
     let (transform, _) = query.single(app.world());
     transform.translation.xy()
 }
+
 
 #[cfg(test)]
 fn get_player_scale(app: &mut App) -> Vec2 {
     let mut query = app.world_mut().query::<(&Transform, &Player)>();
     let (transform, _) = query.single(app.world());
     transform.scale.xy()
+}
+
+#[cfg(test)]
+fn get_player_velocity(app: &mut App) -> Vec2 {
+    let mut query = app.world_mut().query::<&Player>();
+    query.single(app.world()).velocity
 }
 
 #[cfg(test)]
@@ -69,9 +76,10 @@ mod tests {
     }
 
     #[test]
-    fn test_can_create_app() {
-        let velocity = Vec2::new(0.0, 0.0);
-        create_app(velocity);
+    fn test_can_set_and_get_velocity() {
+        let velocity = Vec2::new(1.2, 3.4);
+        let mut app = create_app(velocity);
+        assert_eq!(get_player_velocity(&mut app), velocity);
     }
 
     #[test]
@@ -87,7 +95,7 @@ mod tests {
         let velocity = Vec2::new(0.0, 0.0);
         let mut app = create_app(velocity);
         app.update();
-        assert_eq!(get_player_coordinat(&mut app), Vec2::new(0.0, 0.0));
+        assert_eq!(get_player_position(&mut app), Vec2::new(0.0, 0.0));
     }
 
     #[test]
@@ -103,6 +111,6 @@ mod tests {
         let velocity = Vec2::new(1.2, 3.4);
         let mut app = create_app(velocity);
         app.update(); // moves the player
-        assert_ne!(get_player_coordinat(&mut app), Vec2::new(0.0, 0.0));
+        assert_ne!(get_player_position(&mut app), Vec2::new(0.0, 0.0));
     }
 }
