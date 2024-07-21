@@ -8,7 +8,7 @@ pub struct Player {
 
 pub fn create_app(velocity: Vec2) -> App {
     let mut app = App::new();
-    let add_player_fn = move |/* no mut? */ commands: Commands| {
+    let add_player_fn = move |commands: Commands| {
         add_player(commands, velocity);
     };
     app.add_systems(Startup, add_player_fn);
