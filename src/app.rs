@@ -59,8 +59,8 @@ fn get_player_size(app: &mut App) -> Vec2 {
 
 #[cfg(test)]
 fn get_player_velocity(app: &mut App) -> Vec2 {
-    let mut query = app.world_mut().query::<(&Transform, &Player)>();
-    let (_, player) = query.single(app.world());
+    let mut query = app.world_mut().query::<&Player>();
+    let player = query.single(app.world());
     player.velocity
 }
 
