@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-/// Player elements that cannot be put in a SpriteBundle
+/// Player elements that cannot be put in a Sprite
 #[derive(Component)]
 pub struct Player {
     pub velocity: Vec2,
@@ -26,7 +26,7 @@ fn move_player(mut query: Query<(&mut Transform, &Player)>) {
 
 fn add_player(mut commands: Commands, velocity: Vec2) {
     commands.spawn((
-        SpriteBundle {
+        Sprite {
             transform: Transform {
                 scale: Vec3::new(64.0, 32.0, 0.0),
                 ..default()
